@@ -1,0 +1,29 @@
+{
+  "name": "adhikar-monorepo",
+  "version": "1.0.0",
+  "description": "Adhikar - Decentralized Tribal Land Registry (MERN + Web3 Monorepo)",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "contracts"
+  ],
+  "scripts": {
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install && cd ../contracts && npm install",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "start:server": "cd server && npm start",
+    "build:client": "cd client && npm run build",
+    "compile:contracts": "cd contracts && npm run compile",
+    "deploy:contracts": "cd contracts && npm run deploy"
+  },
+  "keywords": [
+    "blockchain",
+    "mern",
+    "web3",
+    "land-registry",
+    "ethereum"
+  ],
+  "author": "",
+  "license": "MIT"
+}
