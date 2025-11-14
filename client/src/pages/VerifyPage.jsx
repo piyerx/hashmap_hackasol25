@@ -1,29 +1,28 @@
 import { useState } from 'react';
+import axios from 'axios';
 
 const VerifyPage = () => {
   const [txHash, setTxHash] = useState('');
   const [verificationResult, setVerificationResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setVerificationResult(null);
 
-    setTimeout(() => {
-      if (txHash.length > 10) {
-        setVerificationResult({
-          valid: true,
-          message: 'This transaction is valid and recorded on the blockchain.',
-          txHash: txHash,
-        });
-      } else {
-        setVerificationResult({
-          valid: false,
-          message: 'Invalid or not found on blockchain.',
-        });
-      }
+    try {
+      const response = await axios.get(`http://localhost:5000/api/verify/transaction/${txHash}`);
+      setVerificationResult(response.data);
+    } catch (error) {
+      console.error('Verification error:', error);
+      setVerificationResult({
+        valid: false,
+        message: error.response?.data?.message || 'Failed to verify transaction. Please check the hash and try again.'
+      });
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -67,25 +66,82 @@ const VerifyPage = () => {
           {verificationResult && (
             <div
               className={`mt-6 p-4 rounded border ${
-                verificationResult.valid
+                verificationResult.valid && verificationResult.isLandClaim
                   ? 'bg-green-50 border-primary text-text-dark'
                   : 'bg-red-50 border-red-400 text-red-700'
               }`}
             >
               <h3 className="font-semibold text-lg mb-2">
-                {verificationResult.valid ? '✓ Valid Claim' : '✗ Invalid Claim'}
+                {verificationResult.valid && verificationResult.isLandClaim ? '✓ Valid Claim' : '✗ Invalid Claim'}
               </h3>
               <p className="mb-2">{verificationResult.message}</p>
-              {verificationResult.valid && (
-                <div className="mt-3 space-y-1 text-sm">
-                  <p>
-                    <span className="font-medium">Transaction Hash:</span>{' '}
-                    <code className="bg-white px-2 py-1 rounded">{verificationResult.txHash}</code>
-                  </p>
-                  <p className="text-gray-600">
-                    This claim has been verified and permanently recorded by the Gram Sabha.
-                  </p>
+              
+              {verificationResult.valid && verificationResult.isLandClaim && verificationResult.claimData && (
+                <div className="mt-4 space-y-3">
+                  <div className="bg-white p-3 rounded border border-green-200">
+                    <p className="text-sm text-gray-600">Owner Name</p>
+                    <p className="font-semibold text-lg text-primary">{verificationResult.claimData.ownerName}</p>
+                  </div>
+                  
+                  <div className="bg-white p-3 rounded border border-green-200">
+                    <p className="text-sm text-gray-600">Location (GPS Coordinates)</p>
+                    <p className="font-mono text-text-dark">{verificationResult.claimData.location}</p>
+                  </div>
+                  
+                  <div className="bg-white p-3 rounded border border-green-200">
+                    <p className="text-sm text-gray-600">Claim ID</p>
+                    <p className="font-mono text-sm text-text-dark break-all">{verificationResult.claimData.claimId}</p>
+                  </div>
+                  
+                  <div className="bg-white p-3 rounded border border-green-200">
+                    <p className="text-sm text-gray-600">Verified By (Gram Sabha)</p>
+                    <p className="font-mono text-sm text-text-dark break-all">{verificationResult.claimData.verifiedBy}</p>
+                  </div>
+                  
+                  <div className="bg-white p-3 rounded border border-green-200">
+                    <p className="text-sm text-gray-600">Verification Time</p>
+                    <p className="text-text-dark">
+                      {verificationResult.claimData.timestamp 
+                        ? new Date(verificationResult.claimData.timestamp).toLocaleString('en-IN', {
+                            dateStyle: 'medium',
+                            timeStyle: 'short'
+                          })
+                        : 'N/A'}
+                    </p>
+                  </div>
+                  
+                  <div className="bg-white p-3 rounded border border-green-200">
+                    <p className="text-sm text-gray-600">Block Number</p>
+                    <p className="text-text-dark">{verificationResult.blockNumber}</p>
+                  </div>
+                  
+                  <a
+                    href={`https://sepolia.etherscan.io/tx/${txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-center bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors mt-3"
+                  >
+                    View on Etherscan ↗
+                  </a>
                 </div>
+              )}
+              
+              {verificationResult.valid && !verificationResult.isLandClaim && (
+                <div className="mt-3">
+                  <p className="text-gray-600 text-sm">This transaction exists on the blockchain but is not a land claim verification.</p>
+                  <a
+                    href={`https://sepolia.etherscan.io/tx/${txHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block mt-2 text-blue-600 hover:underline text-sm"
+                  >
+                    View on Etherscan ↗
+                  </a>
+                </div>
+              )}
+              
+              {!verificationResult.valid && (
+                <p className="text-sm mt-2">{verificationResult.error || 'Please check the transaction hash and try again.'}</p>
               )}
             </div>
           )}

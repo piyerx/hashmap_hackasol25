@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const claimRoutes = require('./routes/claims');
+const verifyRoutes = require('./routes/verify');
 const { initializeBlockchain } = require('./services/blockchainService');
 
 const app = express();
@@ -25,6 +26,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/adhikar',
 
 app.use('/api/auth', authRoutes);
 app.use('/api/claims', claimRoutes);
+app.use('/api/verify', verifyRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date() });
