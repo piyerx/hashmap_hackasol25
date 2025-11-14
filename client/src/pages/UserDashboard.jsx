@@ -78,8 +78,11 @@ const UserDashboard = () => {
                             : 'bg-yellow-100 text-yellow-800'
                         }`}
                       >
-                        {claim.status === 'Verified' ? '✓' : '⏳'}
-                        {claim.status}
+                        {claim.status === 'Verified' ? (
+                          <>✓ Verified</>
+                        ) : (
+                          <>⏳ Pending - Under Review ({claim.voteCount || 0}/{claim.requiredVotes || 5} Votes)</>
+                        )}
                       </span>
                     </div>
                     <p className="text-gray-600">📍 {claim.location}</p>

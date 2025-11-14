@@ -27,6 +27,7 @@ export const claimsAPI = {
   getMyClaims: () => api.get('/claims/my-claims'),
   getPendingClaims: () => api.get('/claims/pending'),
   approveClaim: (claimId) => api.put(`/claims/approve/${claimId}`),
+  voteForClaim: (claimId) => api.post(`/claims/vote/${claimId}`),
 };
 
 export default api;

@@ -34,7 +34,10 @@ const initializeBlockchain = () => {
     } else {
       console.warn('WARNING: Contract ABI not found. Please compile contracts first.');
       abi = [
+        "function voteToApprove(uint256 claimId, string memory ownerName, string memory location, string memory documentHash) external",
         "function recordVerifiedTitle(uint256 claimId, string memory ownerName, string memory location, string memory documentHash) external",
+        "function getClaimVoteStatus(uint256 claimId) external view returns (uint8 voteCount, bool finalized, address[] memory voters)",
+        "event VoteCast(uint256 indexed claimId, address indexed voter, uint8 currentVotes)",
         "event TitleVerified(uint256 indexed claimId, string ownerName, string location, address verifiedBy)"
       ];
     }
@@ -89,7 +92,73 @@ const recordVerifiedClaim = async (claimId, ownerName, location, documentHash) =
   }
 };
 
+// New voting function for council members
+const voteForClaim = async (documentHash, ownerName, location, voterWalletAddress, councilMemberIndex = 0) => {
+  try {
+    if (!contract) {
+      const initialized = initializeBlockchain();
+      if (!initialized) {
+        throw new Error('Blockchain service not initialized. Check your .env configuration.');
+      }
+    }
+
+    console.log(`Casting vote on blockchain...`);
+    console.log(`Voter Wallet: ${voterWalletAddress}`);
+    console.log(`Council Member Index: ${councilMemberIndex}`);
+    console.log(`Owner: ${ownerName}`);
+    console.log(`Location: ${location}`);
+    console.log(`Document Hash: ${documentHash}`);
+    
+    // Generate a numeric claim ID from the document hash
+    const numericClaimId = BigInt('0x' + documentHash.substring(0, 16));
+    console.log(`Numeric Claim ID: ${numericClaimId.toString()}`);
+
+    // Create a wallet instance for this specific voter
+    // Note: In production, each council member should sign with their own private key
+    // For now, we'll use the main wallet but this should be changed
+    const voterWallet = wallet; // TODO: Use council member's actual wallet
+    
+    const tx = await contract.connect(voterWallet).voteToApprove(
+      numericClaimId,
+      ownerName,
+      location,
+      documentHash,
+      councilMemberIndex
+    );
+
+    console.log('Vote transaction sent:', tx.hash);
+    console.log('⏳ Waiting for blockchain confirmation...');
+    
+    const receipt = await tx.wait();
+    console.log('✅ Vote confirmed in block:', receipt.blockNumber);
+    
+    // Check if this was the final vote that triggered verification
+    const logs = receipt.logs;
+    let isFinalVote = false;
+    
+    for (const log of logs) {
+      try {
+        const parsed = contract.interface.parseLog(log);
+        if (parsed && parsed.name === 'TitleVerified') {
+          isFinalVote = true;
+          console.log('🎉 FINAL VOTE - Claim verified and recorded on blockchain!');
+        } else if (parsed && parsed.name === 'VoteCast') {
+          console.log(`📊 Vote count: ${parsed.args.currentVotes}/5`);
+        }
+      } catch (err) {
+        // Ignore logs that don't match our contract
+      }
+    }
+
+    return receipt.hash;
+  } catch (error) {
+    console.error('Blockchain voting error:', error);
+    throw new Error(`Failed to cast vote on blockchain: ${error.message}`);
+  }
+};
+
 module.exports = {
   initializeBlockchain,
-  recordVerifiedClaim
+  recordVerifiedClaim,
+  voteForClaim
 };

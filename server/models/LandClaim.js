@@ -32,6 +32,26 @@ const landClaimSchema = new mongoose.Schema({
     formP2: { type: String },
     aadharCard: { type: String },
     witnessProof: { type: String }
+  },
+  votes: [{
+    councilMemberId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    councilMemberName: String,
+    councilWalletAddress: String,
+    votedAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  voteCount: {
+    type: Number,
+    default: 0
+  },
+  requiredVotes: {
+    type: Number,
+    default: 5
   }
 }, {
   timestamps: true

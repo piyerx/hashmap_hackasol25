@@ -29,7 +29,8 @@ const LoginPage = () => {
       const response = await authAPI.login(formData);
       login(response.data.token, response.data.user);
       
-      if (response.data.user.role === 'admin') {
+      // Redirect based on user role
+      if (response.data.user.role === 'admin' || response.data.user.role === 'council') {
         navigate('/admin');
       } else {
         navigate('/dashboard');

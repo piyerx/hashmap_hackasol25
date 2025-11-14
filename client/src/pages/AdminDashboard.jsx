@@ -5,7 +5,7 @@ const AdminDashboard = () => {
   const [claims, setClaims] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [approving, setApproving] = useState(null);
+  const [voting, setVoting] = useState(null);
   const [expandedClaim, setExpandedClaim] = useState(null);
 
   useEffect(() => {
@@ -23,16 +23,25 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleApproveClaim = async (claimId) => {
-    setApproving(claimId);
+  const handleVoteForClaim = async (claimId) => {
+    setVoting(claimId);
     try {
-      await claimsAPI.approveClaim(claimId);
-      setClaims(claims.filter((claim) => claim._id !== claimId));
-      alert('Claim approved and recorded on blockchain successfully!');
+      const response = await claimsAPI.voteForClaim(claimId);
+      const { voteCount, requiredVotes, finalized, message } = response.data;
+      
+      if (finalized) {
+        alert(`🎉 ${message}\n\nVotes: ${voteCount}/${requiredVotes}\nClaim has been verified and recorded on blockchain!`);
+        setClaims(claims.filter((claim) => claim._id !== claimId));
+      } else {
+        alert(`✓ ${message}\n\nVotes: ${voteCount}/${requiredVotes}\nWaiting for ${requiredVotes - voteCount} more vote(s).`);
+        // Refresh to show updated vote count
+        fetchPendingClaims();
+      }
     } catch (err) {
-      alert('Failed to approve claim: ' + (err.response?.data?.error || err.message));
+      const errorMsg = err.response?.data?.error || err.message;
+      alert('Failed to cast vote: ' + errorMsg);
     } finally {
-      setApproving(null);
+      setVoting(null);
     }
   };
 
@@ -51,8 +60,8 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-bg-light py-8 px-4">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-primary mb-2">Gram Sabha Dashboard</h1>
-        <p className="text-gray-600 mb-6">Review and approve pending land claims</p>
+        <h1 className="text-3xl font-bold text-primary mb-2">Gram Sabha Council Dashboard</h1>
+        <p className="text-gray-600 mb-6">Review and vote on pending land claims (5 votes required)</p>
 
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -78,7 +87,7 @@ const AdminDashboard = () => {
                       <div className="flex items-center gap-3">
                         <h3 className="text-xl font-semibold text-text-dark">{claim.ownerName}</h3>
                         <span className="px-3 py-1 rounded text-sm font-medium bg-yellow-100 text-yellow-800">
-                          {claim.status}
+                          Pending - {claim.voteCount || 0} of {claim.requiredVotes || 5} Votes
                         </span>
                       </div>
                       <p className="text-gray-600 mt-1">📍 {claim.location}</p>
@@ -110,6 +119,40 @@ const AdminDashboard = () => {
                 {expandedClaim === claim._id && (
                   <div className="px-6 pb-6 border-t border-gray-200">
                     <div className="pt-4 space-y-4">
+                      {/* Voting Status */}
+                      <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                        <h4 className="font-semibold text-text-dark mb-3 flex items-center gap-2">
+                          <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Voting Status: {claim.voteCount || 0} / {claim.requiredVotes || 5} Votes
+                        </h4>
+                        
+                        {claim.votes && claim.votes.length > 0 ? (
+                          <div className="space-y-2">
+                            <p className="text-sm font-medium text-gray-700">Council Members Who Voted:</p>
+                            {claim.votes.map((vote, index) => (
+                              <div key={index} className="flex items-center gap-2 text-sm">
+                                <span className="text-green-600">✓</span>
+                                <span className="font-medium">{vote.councilMemberName || vote.councilMemberId?.username || 'Council Member'}</span>
+                                <span className="text-gray-500">•</span>
+                                <span className="text-gray-600">
+                                  {new Date(vote.votedAt).toLocaleString('en-IN', { 
+                                    dateStyle: 'short', 
+                                    timeStyle: 'short' 
+                                  })}
+                                </span>
+                              </div>
+                            ))}
+                            <p className="text-sm text-gray-600 mt-3 italic">
+                              Need {(claim.requiredVotes || 5) - (claim.voteCount || 0)} more vote(s) for blockchain verification
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-600">No votes cast yet. Be the first to vote!</p>
+                        )}
+                      </div>
+
                       {/* Uploaded Documents */}
                       {claim.uploadedFiles && (
                         <div className="bg-bg-light p-4 rounded-lg">
@@ -179,24 +222,27 @@ const AdminDashboard = () => {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleApproveClaim(claim._id);
+                            handleVoteForClaim(claim._id);
                           }}
-                          disabled={approving === claim._id}
+                          disabled={voting === claim._id}
                           className={`w-full md:w-auto px-8 py-3 rounded text-white font-medium transition-colors ${
-                            approving === claim._id
+                            voting === claim._id
                               ? 'bg-gray-400 cursor-not-allowed'
                               : 'bg-primary hover:bg-primary-dark'
                           }`}
                         >
-                          {approving === claim._id ? (
+                          {voting === claim._id ? (
                             <span className="flex items-center justify-center gap-2">
                               <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
-                              Approving & Recording on Blockchain...
+                              Casting Vote on Blockchain...
                             </span>
                           ) : (
-                            'Approve Claim & Record on Blockchain'
+                            `🗳️ Vote to Approve (${claim.voteCount || 0}/${claim.requiredVotes || 5})`
                           )}
                         </button>
+                        <p className="text-xs text-gray-500 mt-2">
+                          Your vote will be recorded on the blockchain. When 5 votes are reached, the claim will be verified automatically.
+                        </p>
                       </div>
                     </div>
                   </div>

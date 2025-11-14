@@ -31,6 +31,7 @@ const Navbar = () => {
                 <span className="text-text-dark">
                   Welcome, <span className="font-semibold">{user.username}</span>
                   {user.role === 'admin' && <span className="ml-1 text-xs bg-primary text-white px-2 py-1 rounded">Admin</span>}
+                  {user.role === 'council' && <span className="ml-1 text-xs bg-blue-600 text-white px-2 py-1 rounded">Council</span>}
                 </span>
                 {user.role === 'user' && (
                   <>
@@ -48,12 +49,12 @@ const Navbar = () => {
                     </Link>
                   </>
                 )}
-                {user.role === 'admin' && (
+                {(user.role === 'admin' || user.role === 'council') && (
                   <Link
                     to="/admin"
                     className="px-4 py-2 text-primary hover:text-primary-dark"
                   >
-                    Admin Dashboard
+                    {user.role === 'council' ? 'Council Dashboard' : 'Admin Dashboard'}
                   </Link>
                 )}
                 <button

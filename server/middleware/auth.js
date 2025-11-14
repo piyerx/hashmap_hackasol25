@@ -30,4 +30,11 @@ const userAuth = (req, res, next) => {
   next();
 };
 
-module.exports = { auth, adminAuth, userAuth };
+const councilAuth = (req, res, next) => {
+  if (req.user.role !== 'council' && req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Access denied. Council member role required.' });
+  }
+  next();
+};
+
+module.exports = { auth, adminAuth, userAuth, councilAuth };
