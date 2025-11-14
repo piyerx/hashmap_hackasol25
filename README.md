@@ -1,3 +1,5 @@
+*(Project Under Development)*
+
 # Adhikar - Decentralized Tribal Land Registry
 
 A complete MERN + Web3 application for tribal communities to submit and verify land claims on the blockchain.
