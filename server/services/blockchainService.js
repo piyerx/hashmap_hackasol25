@@ -57,19 +57,30 @@ const recordVerifiedClaim = async (claimId, ownerName, location, documentHash) =
       }
     }
 
-    console.log(`Recording claim ${claimId} on blockchain...`);
+    console.log(`Recording claim on blockchain...`);
+    console.log(`Owner: ${ownerName}`);
+    console.log(`Location: ${location}`);
+    console.log(`Document Hash: ${documentHash}`);
+    
+    // Generate a numeric claim ID from the document hash
+    // Take first 16 hex characters of the hash and convert to number
+    const numericClaimId = BigInt('0x' + documentHash.substring(0, 16));
+    
+    console.log(`Numeric Claim ID: ${numericClaimId.toString()}`);
     
     const tx = await contract.recordVerifiedTitle(
-      claimId,
+      numericClaimId,
       ownerName,
       location,
       documentHash
     );
 
     console.log('Transaction sent:', tx.hash);
+    console.log('⏳ Waiting for blockchain confirmation...');
     
     const receipt = await tx.wait();
-    console.log('Transaction confirmed in block:', receipt.blockNumber);
+    console.log('✅ Transaction confirmed in block:', receipt.blockNumber);
+    console.log('📝 Transaction hash:', receipt.hash);
 
     return receipt.hash;
   } catch (error) {

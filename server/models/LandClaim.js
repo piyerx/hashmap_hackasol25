@@ -26,6 +26,12 @@ const landClaimSchema = new mongoose.Schema({
   onChainTransactionHash: {
     type: String,
     default: null
+  },
+  uploadedFiles: {
+    formB1: { type: String },
+    formP2: { type: String },
+    aadharCard: { type: String },
+    witnessProof: { type: String }
   }
 }, {
   timestamps: true

@@ -120,7 +120,16 @@ const SubmitClaim = () => {
     setLoading(true);
 
     try {
-      await claimsAPI.submitClaim(formData);
+      const claimData = {
+        ...formData,
+        uploadedFiles: {
+          formB1: files.formB1.name,
+          formP2: files.formP2.name,
+          aadharCard: files.aadharCard.name,
+          witnessProof: files.witnessProof.name
+        }
+      };
+      await claimsAPI.submitClaim(claimData);
       alert('Land claim submitted successfully!');
       navigate('/dashboard');
     } catch (err) {

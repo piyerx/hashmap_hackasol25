@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/submit', auth, userAuth, async (req, res) => {
   try {
-    const { ownerName, location, documentHash } = req.body;
+    const { ownerName, location, documentHash, uploadedFiles } = req.body;
 
     if (!ownerName || !location || !documentHash) {
       return res.status(400).json({ error: 'All fields are required' });
@@ -18,7 +18,8 @@ router.post('/submit', auth, userAuth, async (req, res) => {
       location,
       documentHash,
       status: 'Pending',
-      submittedBy: req.user.userId
+      submittedBy: req.user.userId,
+      uploadedFiles: uploadedFiles || {}
     });
 
     await landClaim.save();
