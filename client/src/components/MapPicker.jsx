@@ -1,7 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const MapPicker = ({ onLocationSelect }) => {
-  const [selectedCoords, setSelectedCoords] = useState(null);
+const MapPicker = ({ onLocationSelect, initialLocation }) => {
+  const [selectedCoords, setSelectedCoords] = useState(initialLocation || null);
+
+  useEffect(() => {
+    if (initialLocation) {
+      setSelectedCoords(initialLocation);
+    }
+  }, [initialLocation]);
 
   const handleMapClick = (e) => {
     const rect = e.target.getBoundingClientRect();

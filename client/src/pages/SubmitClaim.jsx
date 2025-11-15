@@ -103,6 +103,11 @@ const SubmitClaim = () => {
       setLoading(false);
       
       if (allValid) {
+        // Auto-set Akaltara location when documents are verified
+        setFormData(prev => ({
+          ...prev,
+          location: '22.031474, 82.44137'
+        }));
         setCurrentStep(2);
       }
     }, 2000);
@@ -357,7 +362,7 @@ const SubmitClaim = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary mb-4"
                 placeholder={t('enterCoordinates')}
               />
-              <MapPicker onLocationSelect={handleLocationSelect} />
+              <MapPicker onLocationSelect={handleLocationSelect} initialLocation={formData.location} />
             </div>
 
             <button
