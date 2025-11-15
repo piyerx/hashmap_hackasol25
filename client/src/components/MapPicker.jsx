@@ -31,13 +31,19 @@ const MapPicker = ({ onLocationSelect, initialLocation }) => {
       
       const map = L.map(mapRef.current, {
         center: [defaultLat, defaultLng],
-        zoom: 15,
+        zoom: 17,
         zoomControl: true,
       });
 
-      // Use OpenStreetMap tiles - lighter style focusing on land areas
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
+      // Use Esri World Imagery (Satellite) - shows actual land, fields (khet), and terrain
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '© Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN',
+        maxZoom: 19,
+      }).addTo(map);
+
+      // Add labels overlay for better identification
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '',
         maxZoom: 19,
       }).addTo(map);
 
@@ -73,7 +79,7 @@ const MapPicker = ({ onLocationSelect, initialLocation }) => {
         
         // Add marker at initial location
         markerRef.current = L.marker([lat, lng]).addTo(mapInstanceRef.current);
-        mapInstanceRef.current.setView([lat, lng], 15);
+        mapInstanceRef.current.setView([lat, lng], 17);
       }
     }
 
@@ -99,7 +105,7 @@ const MapPicker = ({ onLocationSelect, initialLocation }) => {
         
         // Add marker at new location
         markerRef.current = L.marker([lat, lng]).addTo(mapInstanceRef.current);
-        mapInstanceRef.current.setView([lat, lng], 15);
+        mapInstanceRef.current.setView([lat, lng], 17);
       }
     }
   }, [initialLocation]);
