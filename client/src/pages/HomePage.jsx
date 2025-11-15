@@ -1,67 +1,67 @@
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 const HomePage = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="min-h-screen bg-bg-light">
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-primary mb-4">
-            Adhikar
+            {t('homeTitle')}
           </h1>
           <p className="text-2xl text-text-dark mb-2">
-            Decentralized Tribal Land Registry
+            {t('homeSubtitle')}
           </p>
           <p className="text-lg text-gray-600">
-            Empowering tribal communities through blockchain-based land ownership
+            {t('homeTagline')}
           </p>
         </div>
 
         <div className="bg-white rounded-lg p-8 mb-8 border border-primary">
           <h2 className="text-2xl font-semibold text-text-dark mb-4">
-            About Adhikar
+            {t('aboutAdhikar')}
           </h2>
           <p className="text-gray-700 mb-4">
-            Adhikar is a blockchain-powered platform designed to help tribal communities
-            securely register and verify land ownership claims. Our system combines
-            traditional governance (Gram Sabha) with modern technology to ensure
-            transparency and immutability.
+            {t('aboutDescription')}
           </p>
           <ul className="list-disc list-inside text-gray-700 space-y-2">
-            <li>Submit land claims with supporting documents</li>
-            <li>Gram Sabha verification and approval process</li>
-            <li>Permanent blockchain record of verified claims</li>
-            <li>Public verification of ownership</li>
+            <li>{t('submitClaims')}</li>
+            <li>{t('gramSabhaVerification')}</li>
+            <li>{t('blockchainRecord')}</li>
+            <li>{t('publicVerification')}</li>
           </ul>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-white rounded-lg p-6 border border-primary">
             <h3 className="text-xl font-semibold text-primary mb-3">
-              For Community Members
+              {t('forCommunityMembers')}
             </h3>
             <p className="text-gray-700 mb-4">
-              Register your land claims and track their verification status.
+              {t('communityDescription')}
             </p>
             <Link
               to="/register"
               className="inline-block px-6 py-2 bg-primary text-white rounded hover:bg-primary-dark transition-colors"
             >
-              Get Started
+              {t('getStarted')}
             </Link>
           </div>
 
           <div className="bg-white rounded-lg p-6 border border-primary">
             <h3 className="text-xl font-semibold text-primary mb-3">
-              For Gram Sabha
+              {t('forGramSabha')}
             </h3>
             <p className="text-gray-700 mb-4">
-              Review and approve land claims, recording them permanently on blockchain.
+              {t('gramSabhaDescription')}
             </p>
             <Link
               to="/login"
               className="inline-block px-6 py-2 bg-text-dark text-white rounded hover:bg-gray-800 transition-colors"
             >
-              Admin Login
+              {t('adminLogin')}
             </Link>
           </div>
         </div>
@@ -71,7 +71,7 @@ const HomePage = () => {
             to="/verify"
             className="text-primary hover:text-primary-dark underline text-lg"
           >
-            Verify a claim on the blockchain →
+            {t('verifyClaimLink')}
           </Link>
         </div>
       </div>

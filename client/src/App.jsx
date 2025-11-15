@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 import HomePage from './pages/HomePage';
@@ -12,11 +13,12 @@ import VerifyPage from './pages/VerifyPage';
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen">
-          <Navbar />
-          <Routes>
+    <LanguageProvider>
+      <AuthProvider>
+        <Router>
+          <div className="min-h-screen">
+            <Navbar />
+            <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -54,6 +56,7 @@ function App() {
         </div>
       </Router>
     </AuthProvider>
+    </LanguageProvider>
   );
 }
 

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { claimsAPI } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 import MapPicker from '../components/MapPicker';
 
 const SubmitClaim = () => {
+  const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(1); // 1: Upload, 2: Verify, 3: Submit
   const [formData, setFormData] = useState({
     ownerName: '',
@@ -177,7 +179,7 @@ const SubmitClaim = () => {
   return (
     <div className="min-h-screen bg-bg-light py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-primary mb-6">Submit Land Claim</h1>
+        <h1 className="text-3xl font-bold text-primary mb-6">{t('submitLandClaim')}</h1>
 
         {/* Progress Steps */}
         <div className="mb-8 flex items-center justify-center space-x-4">
@@ -185,21 +187,21 @@ const SubmitClaim = () => {
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-300'}`}>
               1
             </div>
-            <span className="ml-2 font-medium">Upload Documents</span>
+            <span className="ml-2 font-medium">{t('uploadDocuments')}</span>
           </div>
           <div className="w-16 h-1 bg-gray-300"></div>
           <div className={`flex items-center ${currentStep >= 2 ? 'text-primary' : 'text-gray-400'}`}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-300'}`}>
               2
             </div>
-            <span className="ml-2 font-medium">Verify & Hash</span>
+            <span className="ml-2 font-medium">{t('verifyHash')}</span>
           </div>
           <div className="w-16 h-1 bg-gray-300"></div>
           <div className={`flex items-center ${currentStep >= 3 ? 'text-primary' : 'text-gray-400'}`}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep >= 3 ? 'bg-primary text-white' : 'bg-gray-300'}`}>
               3
             </div>
-            <span className="ml-2 font-medium">Submit Claim</span>
+            <span className="ml-2 font-medium">{t('submitClaim')}</span>
           </div>
         </div>
 
@@ -212,11 +214,11 @@ const SubmitClaim = () => {
         {/* Step 1: Upload Documents */}
         {currentStep === 1 && (
           <div className="bg-white rounded-lg border border-primary p-8">
-            <h2 className="text-2xl font-bold text-text-dark mb-6">Step 1: Upload Documents & Enter Owner Name</h2>
+            <h2 className="text-2xl font-bold text-text-dark mb-6">{t('step1Title')}</h2>
             
             <div className="mb-6">
               <label htmlFor="ownerName" className="block text-text-dark font-medium mb-2">
-                Land Owner Name *
+                {t('landOwnerName')} *
               </label>
               <input
                 type="text"
@@ -226,16 +228,16 @@ const SubmitClaim = () => {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Enter the land owner's name"
+                placeholder={t('enterOwnerName')}
               />
             </div>
 
-            <h3 className="text-lg font-semibold text-text-dark mb-4">Required Documents (PDF only)</h3>
+            <h3 className="text-lg font-semibold text-text-dark mb-4">{t('requiredDocuments')}</h3>
 
             <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-text-dark font-medium mb-2">
-                  1. Form B1 *
+                  1. {t('formB1')} *
                 </label>
                 <input
                   type="file"
@@ -250,7 +252,7 @@ const SubmitClaim = () => {
 
               <div>
                 <label className="block text-text-dark font-medium mb-2">
-                  2. Form P2 *
+                  2. {t('formP2')} *
                 </label>
                 <input
                   type="file"
@@ -265,7 +267,7 @@ const SubmitClaim = () => {
 
               <div>
                 <label className="block text-text-dark font-medium mb-2">
-                  3. Aadhar Card *
+                  3. {t('aadharCard')} *
                 </label>
                 <input
                   type="file"
@@ -280,7 +282,7 @@ const SubmitClaim = () => {
 
               <div>
                 <label className="block text-text-dark font-medium mb-2">
-                  4. Witness Proof *
+                  4. {t('witnessProof')} *
                 </label>
                 <input
                   type="file"
@@ -306,10 +308,10 @@ const SubmitClaim = () => {
               {loading ? (
                 <span className="flex items-center justify-center">
                   <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                  Verifying Documents with AI...
+                  {t('verifyingDocs')}
                 </span>
               ) : (
-                '🔍 Scan & Verify Documents'
+                t('scanVerifyDocs')
               )}
             </button>
 
@@ -335,16 +337,16 @@ const SubmitClaim = () => {
         {/* Step 2: Generate Hash & GPS */}
         {currentStep === 2 && (
           <div className="bg-white rounded-lg border border-primary p-8">
-            <h2 className="text-2xl font-bold text-text-dark mb-6">Step 2: Generate Hash & Select Location</h2>
+            <h2 className="text-2xl font-bold text-text-dark mb-6">{t('step2Title')}</h2>
 
             <div className="mb-6 p-4 bg-green-50 border border-green-500 rounded">
-              <h4 className="font-bold text-green-800 mb-2">✅ Documents Verified Successfully!</h4>
-              <p className="text-sm text-green-700">Owner: <strong>{formData.ownerName}</strong></p>
+              <h4 className="font-bold text-green-800 mb-2">{t('docsVerifiedSuccess')}</h4>
+              <p className="text-sm text-green-700">{t('owner')}: <strong>{formData.ownerName}</strong></p>
             </div>
 
             <div className="mb-6">
               <label className="block text-text-dark font-medium mb-2">
-                GPS Location *
+                {t('gpsLocation')} *
               </label>
               <input
                 type="text"
@@ -353,7 +355,7 @@ const SubmitClaim = () => {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary mb-4"
-                placeholder="e.g., 22.123456, 77.654321"
+                placeholder={t('enterCoordinates')}
               />
               <MapPicker onLocationSelect={handleLocationSelect} />
             </div>
@@ -370,10 +372,10 @@ const SubmitClaim = () => {
               {hashGenerating ? (
                 <span className="flex items-center justify-center">
                   <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                  Generating Hash...
+                  {t('generatingHash')}
                 </span>
               ) : (
-                '🔐 Generate Document Hash'
+                t('generateHash')
               )}
             </button>
           </div>
@@ -382,26 +384,26 @@ const SubmitClaim = () => {
         {/* Step 3: Final Submit */}
         {currentStep === 3 && (
           <div className="bg-white rounded-lg border border-primary p-8">
-            <h2 className="text-2xl font-bold text-text-dark mb-6">Step 3: Review & Submit Claim</h2>
+            <h2 className="text-2xl font-bold text-text-dark mb-6">{t('step3Title')}</h2>
 
             <div className="space-y-4 mb-6">
               <div className="p-4 bg-gray-50 rounded">
-                <p className="text-sm text-gray-600">Owner Name</p>
+                <p className="text-sm text-gray-600">{t('landOwnerName')}</p>
                 <p className="font-semibold">{formData.ownerName}</p>
               </div>
 
               <div className="p-4 bg-gray-50 rounded">
-                <p className="text-sm text-gray-600">GPS Location</p>
+                <p className="text-sm text-gray-600">{t('gpsLocation')}</p>
                 <p className="font-semibold">{formData.location}</p>
               </div>
 
               <div className="p-4 bg-gray-50 rounded">
-                <p className="text-sm text-gray-600">Document Hash (SHA-256)</p>
+                <p className="text-sm text-gray-600">{t('documentHash')}</p>
                 <p className="font-mono text-xs break-all">{formData.documentHash}</p>
               </div>
 
               <div className="p-4 bg-gray-50 rounded">
-                <p className="text-sm text-gray-600 mb-2">Uploaded Documents</p>
+                <p className="text-sm text-gray-600 mb-2">{t('uploadedDocuments')}</p>
                 <ul className="text-sm space-y-1">
                   <li>✓ {files.formB1.name}</li>
                   <li>✓ {files.formP2.name}</li>
@@ -422,14 +424,14 @@ const SubmitClaim = () => {
                       : 'bg-primary hover:bg-primary-dark'
                   }`}
                 >
-                  {loading ? 'Submitting to Blockchain...' : '📤 Submit Land Claim'}
+                  {loading ? t('submittingBlockchain') : t('submitClaimBtn')}
                 </button>
                 <button
                   type="button"
                   onClick={() => navigate('/dashboard')}
                   className="px-6 py-3 border border-primary text-primary rounded hover:bg-primary hover:text-white transition-colors"
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
               </div>
             </form>
