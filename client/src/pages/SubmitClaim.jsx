@@ -144,11 +144,6 @@ const SubmitClaim = () => {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-primary mb-6">Submit Land Claim</h1>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          <OcrScanner onScan={handleOcrScan} />
-          <MapPicker onLocationSelect={handleLocationSelect} />
-        </div>
-
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
@@ -188,7 +183,7 @@ const SubmitClaim = () => {
                 placeholder="e.g., 22.123456, 77.654321"
               />
               <p className="text-sm text-gray-500 mt-1">
-                Use the map picker above or enter coordinates manually
+                Use the map picker below or enter coordinates manually
               </p>
             </div>
 
@@ -310,6 +305,11 @@ const SubmitClaim = () => {
               </button>
             </div>
           </form>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 mt-6">
+          <OcrScanner onScan={handleOcrScan} />
+          <MapPicker onLocationSelect={handleLocationSelect} />
         </div>
       </div>
     </div>
