@@ -1,4 +1,5 @@
-*(Project for Hack-A-Sol 4.0 | Completed on 15 Nov, 2025 @ 12:07 PM)*
+*(Project for Hack-A-Sol 4.0 | Completed on 15 Nov, 2025 @ 12:07 PM)* <br>
+`NOTE: Merging the branch(es) and re-arranging the repo, adding images is done later, the project was finished and deployed during the hackathon deadline.`
 
 # Adhikar - Decentralized Tribal Land Registry
 
