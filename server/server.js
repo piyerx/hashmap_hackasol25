@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const claimRoutes = require('./routes/claims');
 const verifyRoutes = require('./routes/verify');
 const { initializeBlockchain } = require('./services/blockchainService');
+const { runBot } = require('./bot');
 
 const app = express();
 
@@ -19,6 +20,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/adhikar',
 .then(() => {
   console.log('Connected to MongoDB successfully');
   initializeBlockchain();
+  
+  // Start Telegram bot
+  runBot();
 })
 .catch((error) => {
   console.error('MongoDB connection error:', error);
