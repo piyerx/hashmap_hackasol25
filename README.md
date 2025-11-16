@@ -1,214 +1,217 @@
-*(Project for Hack-A-Sol 4.0 | Completed on 15 Nov, 2025 @ 12:07 PM)* <br>
+![HASHMAP Github Banner](https://github.com/user-attachments/assets/1987d028-7be4-4597-8ff9-5bccfa974ec7)
 `NOTE: Merging the branch(es) and re-arranging the repo, adding images is done later, the project was finished and deployed during the hackathon deadline.`
 
-# Adhikar - Decentralized Tribal Land Registry
+# ADHIKAR - Decentralized Tribal Land Registry
+A Web3 + MERN + AI solution to fight corruption and secure ancestral land rights for India's 100 million tribal citizens.
 
-A complete MERN + Web3 application for tribal communities to submit and verify land claims on the blockchain.
+## PROJECT DEMO 📽️
+Watch our 3-minute presentation and demo of the complete application, from user submission to council approval and on-chain verification.
+[Watch the video](https://youtu.be/zKi49ZAPVpI)
 
-## Project Structure
+## THE PROBLEM
+> In regions surrounding the Udanti–Sitanadi Tiger Reserve, tribal communities are facing land surveys and demarcations that many fear could lead to forced relocations, potentially violating the Forest Rights Act and bypassing Gram Sabha consent. Historically, land ownership records in rural Chhattisgarh have been vulnerable to manipulation, loss, and bureaucratic delays, leaving indigenous communities without verifiable proof of their ancestral rights.
+Your challenge is to design a decentralized, blockchain-powered land registry system that ensures transparency, immutability, and community control over land records—preserving tribal rights and preventing unlawful displacement.
+
+## 🏆 THE SOLUTION: Decentralised Governance
+We asked: What if no single person could approve a claim?
+Adhikar is our answer. We replace the single, vulnerable official with a 5-member Gram Sabha (community) council. To verify a land claim, you now need 5 independent, on-chain digital signatures. <br>
+
+This **"5-of-5"** multi-signature model makes corruption economically unfeasible. You can't bribe one person; you'd have to bribe the entire council. This simple change moves the system from a single point of failure to a democratic, decentralised, and incorruptible foundation
+
+## 🖼️ PROJECT SCREENSHOTS
+
+## HOW IT WORKS?
+A Step-by-Step Flow
+
+- **User Submits Claim**: A farmer ("Ramesh") logs in and fills out the claim form. He uploads his 4 key documents (Form B1, P2, Aadhar, Witness Proof).
+- **AI & Hashing**: The system's AI-OCR (placeholder) reads the documents, and an interactive map helps him pin his exact GPS location. A unique SHA-256 hash ("digital fingerprint") is generated from his documents.
+- **Council Review**: The claim now appears on the dashboard of all 5 Gram Sabha council members. The status is "Pending (0/5 Votes)".
+- **Democratic Voting**: Each member reviews the claim and its documents independently. As they vote, the status updates for everyone: "Pending (1/5 Votes)", "Pending (2/5 Votes)", and so on.
+- **Smart Contract Execution**: When the 5th member casts the final, deciding vote, the threshold is met. The backend automatically calls the smart contract, which executes and records the claim's verified data (owner, hash, location) permanently onto the Ethereum blockchain.
+- **Public Verification**: Ramesh's dashboard updates to "Verified ✓" with a link to the Etherscan transaction. Now, anyone (a bank, a buyer, or another office) can instantly verify his ownership on our website or via our Telegram Bot, with no login required.
+
+## 🚀 Core Features
+
+### 👤 User Features
+
+* Secure registration & login (JWT-based authentication).
+* Multi-document upload (4 required proofs).
+* Client-side **SHA-256** hashing to ensure integrity before upload.
+* Interactive GPS map picker to choose precise coordinates.
+* AI OCR scanner (placeholder) to auto-fill parts of the form.
+* Real-time dashboard with automatic status polling (e.g., "Pending 2/5 Votes").
+* Direct Etherscan link for verified claims.
+
+### 👨‍💼 Admin (Gram Sabha Council) Features
+
+* Role-based access for council members.
+* Pending claims dashboard to review all unvoted claims.
+* Expandable claim details: owner, GPS, hash, filenames of uploaded docs.
+* "Vote to Approve" button that logs member votes.
+* Automatic smart contract execution on the 5th (final) vote.
+* Success notifications including transaction hash.
+
+### 🌎 Public & Accessibility Features
+
+* Public verification page (no login) to validate claims using transaction hash.
+* Telegram Bot integration: `/verify <hash>` for low-bandwidth users.
+* Low-bandwidth frontend design built with TailwindCSS (mobile-first).
+* Multi-language placeholder (English/Hindi toggle planned).
+
+---
+
+## 🛠️ Tech Stack
+
+| Component      | Technology                                          |
+| -------------- | --------------------------------------------------- |
+| Frontend       | React 18, Vite, React Router v6, TailwindCSS, Axios |
+| Backend        | Node.js, Express, MongoDB (Mongoose)                |
+| Authentication | JSON Web Tokens (JWT), bcrypt                       |
+| Blockchain     | Solidity (v0.8.20), Hardhat                         |
+| Web3 Lib       | Ethers.js v6, Ethereum (Sepolia Testnet)            |
+| Bot            | node-telegram-bot-api                               |
+| Dev/Build      | npm, Hardhat, Vercel (for deployment)               |
+
+---
+
+## 📁 Project Structure
 
 ```
-hashmap_draft/
-├── client/          # React frontend with TailwindCSS
-├── server/          # Node.js/Express backend
+/
+├── client/          # React frontend (Vite + Tailwind)
+├── server/          # Node.js/Express backend (MERN)
 ├── contracts/       # Hardhat/Solidity smart contracts
 └── README.md
 ```
 
-## Features
+---
 
-- **User Authentication**: JWT-based auth for Users and Admins (Gram Sabha)
-- **Land Claim Submission**: Users can submit land claims with GPS coordinates and document hashes
-- **Admin Approval**: Gram Sabha can review and approve claims, recording them on blockchain
-- **Blockchain Integration**: Verified claims are permanently recorded on Ethereum (Sepolia testnet)
-- **Public Verification**: Anyone can verify claims using blockchain transaction hashes
-- **AI OCR Scanner**: Placeholder for document text extraction (Tesseract.js)
-- **GPS Map Picker**: Interactive map for location selection
-- **Multi-language Support**: Language switcher (English/Hindi)
+## ⚙️ Setup and Deployment (For Developers)
 
-## Tech Stack
-
-### Frontend
-- React 18
-- React Router v6
-- TailwindCSS
-- Vite
-- Axios
-
-### Backend
-- Node.js
-- Express
-- MongoDB + Mongoose
-- JWT Authentication
-- Ethers.js v6
-
-### Blockchain
-- Solidity 0.8.20
-- Hardhat
-- Ethereum Sepolia Testnet
-
-## Setup Instructions
+Follow these steps to run the project locally.
 
 ### Prerequisites
-- Node.js v18+ and npm
-- MongoDB (local or Atlas)
-- MetaMask or similar Web3 wallet
-- Infura/Alchemy account for Sepolia RPC
 
-### 1. Install Dependencies
+* Node.js v20.x or later
+* npm / yarn
+* MongoDB (local or Atlas)
+* A Web3 wallet (MetaMask)
+* Sepolia ETH (from a faucet)
+* An Alchemy or Infura RPC URL
 
-```powershell
-# Install server dependencies
-cd server
-npm install
+### 1. Clone the repository
 
-# Install client dependencies
-cd ../client
-npm install
-
-# Install contracts dependencies
-cd ../contracts
-npm install
+```bash
+git clone https://github.com/YOUR_REPO/adhikar.git
+cd adhikar
 ```
 
 ### 2. Configure Environment Variables
 
-Create `.env` files in both `server/` and `contracts/` directories:
+Create `.env` files in three places.
 
-**server/.env**
+#### A) `contracts/.env`
+
+```bash
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
+PRIVATE_KEY=YOUR_METAMASK_PRIVATE_KEY_FOR_DEPLOYMENT
 ```
+
+#### B) `server/.env`
+
+```bash
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/adhikar
-JWT_SECRET=your_jwt_secret_key_here_min_32_chars
+MONGODB_URI=YOUR_MONGODB_CONNECTION_STRING
+JWT_SECRET=YOUR_SUPER_SECRET_JWT_KEY_MIN_32_CHARS_LONG
 SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
-PRIVATE_KEY=your_ethereum_private_key_here
-CONTRACT_ADDRESS=deployed_contract_address_here
+PRIVATE_KEY=YOUR_SERVER_WALLET_PRIVATE_KEY_FOR_TRANSACTIONS
+CONTRACT_ADDRESS=THE_ADDRESS_FROM_STEP_4
+TELEGRAM_BOT_TOKEN=YOUR_TELEGRAM_BOT_TOKEN
 ```
 
-**contracts/.env**
-```
-SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
-PRIVATE_KEY=your_ethereum_private_key_here
+#### C) `client/.env`
+
+```bash
+VITE_SERVER_URL=http://localhost:5000
 ```
 
-### 3. Deploy Smart Contract
+### 3. Install Dependencies
 
-```powershell
+Run `npm install` in each directory.
+
+```bash
+# In root
+npm install
+
+# In /contracts
+cd contracts && npm install
+
+# In /server
+cd ../server && npm install
+
+# In /client
+cd ../client && npm install
+```
+
+### 4. Deploy the Smart Contract (to get CONTRACT_ADDRESS)
+
+```bash
 cd contracts
-npm run compile
-npm run deploy
-# Copy the CONTRACT_ADDRESS from output to server/.env
+npx hardhat run scripts/deploy.js --network sepolia
 ```
 
-### 4. Start the Application
+Output example: `LandRegistry deployed to: 0x...`
+Copy this address into `server/.env` as `CONTRACT_ADDRESS`.
 
-**Terminal 1 - Start MongoDB** (if running locally)
-```powershell
-mongod
-```
+### 5. Start the Application
 
-**Terminal 2 - Start Backend**
-```powershell
+Open two terminals.
+
+**Terminal 1 — Backend:**
+
+```bash
 cd server
 npm run dev
-# Server runs on http://localhost:5000
+# Server starts on http://localhost:5000
 ```
 
-**Terminal 3 - Start Frontend**
-```powershell
+**Terminal 2 — Frontend:**
+
+```bash
 cd client
 npm run dev
-# Client runs on http://localhost:3000
+# App opens on http://localhost:5173 (or similar)
 ```
 
-## Usage Guide
+### 6. Create Admin / Council Accounts
 
-### For Users (Community Members)
+Register five new users through the frontend, then update their roles in MongoDB manually.
 
-1. **Register**: Create an account at `/register`
-2. **Login**: Sign in at `/login`
-3. **Submit Claim**: 
-   - Navigate to "Submit Claim"
-   - Use OCR scanner to extract owner name from documents
-   - Use map picker to select GPS coordinates
-   - Enter document hash (SHA-256 of land documents)
-   - Submit the claim
-4. **Track Claims**: View all your claims and their status on the dashboard
+Example MongoDB query to set a user as admin:
 
-### For Admins (Gram Sabha)
-
-1. **Login**: Sign in with admin credentials
-2. **Review Claims**: View all pending claims on admin dashboard
-3. **Approve Claims**: 
-   - Click "Approve" on valid claims
-   - System records the claim on blockchain
-   - User receives transaction hash as proof
-
-### Public Verification
-
-- Anyone can visit `/verify` page
-- Enter a blockchain transaction hash
-- System verifies if the claim exists on-chain
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user/admin
-
-### Claims (Protected)
-- `POST /api/claims/submit` - Submit new claim (User only)
-- `GET /api/claims/my-claims` - Get user's claims (User only)
-- `GET /api/claims/pending` - Get pending claims (Admin only)
-- `PUT /api/claims/approve/:claimId` - Approve claim (Admin only)
-
-## Smart Contract Functions
-
-### LandRegistry.sol
-
-- `recordVerifiedTitle(claimId, ownerName, location, documentHash)` - Records verified claim (only Gram Sabha)
-- `getLandTitle(claimId)` - Retrieves claim details
-- `getTotalVerifiedClaims()` - Returns count of verified claims
-- `transferGramSabhaRole(newAddress)` - Transfer admin role
-
-## Color Palette
-
-- Primary (Dark Green): `#4CAF50`
-- Background (Light Green): `#F0FDF4`
-- Text (Dark Grey): `#1F2937`
-
-## Creating Admin Account
-
-To create an admin account, register normally then update the user in MongoDB:
-
-```javascript
+```js
 db.users.updateOne(
-  { username: "admin_username" },
+  { username: "council_member_1" },
   { $set: { role: "admin" } }
 )
 ```
 
-## Security Notes
+---
 
-- Never commit `.env` files
-- Keep private keys secure
-- Use environment variables for sensitive data
-- Hash document contents before storing hashes
-- Validate all inputs on both client and server
+## 🗺️ Future Roadmap
 
-## Future Enhancements
+* Full Tesseract.js OCR integration, WhatsApp Bot.
+* Integration with official government registries and migration to a low-cost L2 (e.g., Polygon) for minimal transaction costs.
 
-- Implement actual OCR with Tesseract.js
-- Integrate real map API (Google Maps/OpenStreetMap)
-- Add document upload to IPFS
-- Multi-language translation system
-- Mobile app version
-- Batch claim processing
+---
 
-## License
+## ⚠️ Notes & Helpful Tips
 
-MIT
+* If you hit Sepolia faucet issues requiring mainnet ETH, try alternative Sepolia faucets or use a local test RPC (Hardhat/Anvil) for development deployments.
+* Keep private keys out of source control. Use secure secret managers for production.
 
-## Support
+---
 
-For issues and questions, please open an issue on the repository.
+## THANK YOU
+
+Made with ❤️ by Team HASHMAP for Hack-A-Sol 4.0
