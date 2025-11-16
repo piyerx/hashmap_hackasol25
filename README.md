@@ -1,4 +1,4 @@
-*(Project Under Development)*
+*(Project for Hack-A-Sol 4.0 | Completed on 15 Nov, 2025 @ 12:07 PM)*
 
 # Adhikar - Decentralized Tribal Land Registry
 
