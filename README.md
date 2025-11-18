@@ -1,4 +1,7 @@
-![HASHMAP Github Banner](https://github.com/user-attachments/assets/1987d028-7be4-4597-8ff9-5bccfa974ec7)
+<img width="1808" height="156" alt="asdasdasd" src="https://github.com/user-attachments/assets/9c089850-2c72-41d8-9a50-3a30e498390a" />
+
+![HASHMAP![Uploading asdasdasd.png…]()
+ Github Banner](https://github.com/user-attachments/assets/1987d028-7be4-4597-8ff9-5bccfa974ec7)
 `NOTE: Merging the branch(es) and re-arranging the repo, adding images is done later, the project was finished and deployed during the hackathon deadline.`
 
 # ADHIKAR - Decentralized Tribal Land Registry
